@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class CircProductCondiguration extends ProductConfiguration
+class CircProductConfiguration extends ProductConfiguration
 {
     use HasFactory;
 

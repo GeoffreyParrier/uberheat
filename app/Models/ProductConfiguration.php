@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 abstract class ProductConfiguration extends Model
 {
@@ -24,4 +25,13 @@ abstract class ProductConfiguration extends Model
     ];
 
     abstract public function getSurface(): float;
+
+    /**
+     * Get all connected products
+     * @return BelongsToMany
+     */
+    public function getProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class);
+    }
 }

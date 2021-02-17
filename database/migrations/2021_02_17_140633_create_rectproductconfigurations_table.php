@@ -16,6 +16,7 @@ class CreateRectProductConfigurationsTable extends Migration
         Schema::create('rectproductconfigurations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->float('depth');
             $table->float('db_1');
             $table->float('db_2');

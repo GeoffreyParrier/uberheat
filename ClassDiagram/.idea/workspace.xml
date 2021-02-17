@@ -20,6 +20,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="settings.editor.splitter.proportion" value="0.2570499" />
@@ -35,7 +36,7 @@
       <updated>1613554639989</updated>
       <workItem from="1613554641113" duration="1075000" />
       <workItem from="1613559527465" duration="14000" />
-      <workItem from="1613559551139" duration="649000" />
+      <workItem from="1613559551139" duration="941000" />
     </task>
     <servers />
   </component>

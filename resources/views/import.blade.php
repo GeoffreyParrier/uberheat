@@ -9,14 +9,11 @@
 </head>
 <body>
 <h1>Import de vos données!</h1>
-@if (count($errors) > 0)
-    <div style="color:dodgerblue;">
-        <ul>
-            @foreach ($errors as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+@if (!empty($msgs) && count($msgs) > 0)
+    @foreach ($msgs as $msg)
+        <span style="margin-bottom: 15px; padding: 10px 20px; border: 1px solid dodgerblue; color: dodgerblue;"
+        >{{ $msg }}</span>
+    @endforeach
 @endif
 <form method="POST" action="" enctype="multipart/form-data">
     @csrf

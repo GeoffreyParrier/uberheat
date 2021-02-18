@@ -13,7 +13,7 @@ class CreateCircProductConfigurationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('circproductconfigurations', function (Blueprint $table) {
+        Schema::create('circ_product_configurations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');

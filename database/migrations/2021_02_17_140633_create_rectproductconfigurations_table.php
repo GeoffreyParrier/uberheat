@@ -13,7 +13,7 @@ class CreateRectProductConfigurationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rectproductconfigurations', function (Blueprint $table) {
+        Schema::create('rect_product_configurations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');

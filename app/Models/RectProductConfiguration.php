@@ -25,4 +25,5 @@ class RectProductConfiguration extends ProductConfiguration
     {
         return $this->depth * $this->diameter;
     }
+
 }

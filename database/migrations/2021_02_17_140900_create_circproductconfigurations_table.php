@@ -22,9 +22,7 @@ class CreateCircProductConfigurationsTable extends Migration
             $table->float('db_2');
             $table->float('db_5');
             $table->float('db_10');
-            $table->float('width');
-            $table->float('height');
-            $table->float('thickness');
+            $table->float('diameter');
         });
     }
 

@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Http\Managers;
+namespace App\Http\Services;
 
 
 use App\Http\Helpers\CSVParser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class ImportManager
+class ImportProductService
 {
     /**
      * @param UploadedFile[] $files

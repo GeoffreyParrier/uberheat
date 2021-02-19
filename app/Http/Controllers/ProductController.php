@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Managers\ImportManager;
+use App\Http\Services\ImportProductService;
 use App\Models\CircProductConfiguration;
 use App\Models\Product;
 use App\Models\RectProductConfiguration;
@@ -16,28 +16,22 @@ class ProductController extends Controller
         return view('import');
     }
 
-    function sendImport(Request $request)
+    function sendImport(Request $request, ImportProductService $importProductManager)
     {
-//        return $request->file('file')->getMimeType();
         $msg = [];
         try {
             $request->validate([
                 'file' => 'required|mimetypes:text/csv,text/plain,application/csv,text/comma-separated-values,text/anytext,application/octet-stream,application/txt',
             ]);
-            $importManager = new ImportManager();
-            $datas = $importManager->parse([$request->file('file')]);
+
+            $datas = $importProductManager->parse([$request->file('file')]);
 
             foreach ($datas as $index => $row) {
-                if (!array_key_exists('Article', $row)) {
-                    var_dump('(' . $index . ') :');
-                    var_dump($row);
-                }
-
-
                 $newProduct = Product::firstOrCreate([
                     'name' => $row['Article'],
                 ]);
 
+                // TODO: refactor it in a Factory
                 if ($row['Type'] === 'Rectangulaire') {
                     RectProductConfiguration::create([
                         'product_id' => $newProduct->id,

@@ -36,15 +36,13 @@ class CircProductConfigurationRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?CircProductConfiguration
+    public function findOneById($searched_id): ?CircProductConfiguration
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('cpc')
+            ->andWhere('cpc.id = :id')
+            ->setParameter('id', $searched_id)
             ->getQuery()
             ->getOneOrNullResult()
-        ;
+            ;
     }
-    */
 }

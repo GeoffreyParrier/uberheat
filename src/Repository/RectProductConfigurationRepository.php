@@ -36,15 +36,13 @@ class RectProductConfigurationRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?RectProductConfiguration
+    public function findOneById($searched_id): ?RectProductConfiguration
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('rpc')
+            ->andWhere('rpc.id = :id')
+            ->setParameter('id', $searched_id)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

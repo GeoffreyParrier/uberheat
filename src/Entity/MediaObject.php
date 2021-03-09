@@ -15,13 +15,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity
  * @ApiResource(
- *     collectionOperations={
- *         "post"={
- *             "controller"=CreateMediaObjectAction::class,
- *             "deserialize"=false,
- *         },
- *         "get"
- *     },
  *     itemOperations={
  *         "get"
  *     }

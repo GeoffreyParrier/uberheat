@@ -4,12 +4,21 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductRepository;
+use App\Controller\CreateProductAction;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "post"={
+ *             "controller"=CreateProductAction::class,
+ *             "deserialize"=false,
+ *         },
+ *         "get"
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
@@ -35,6 +44,11 @@ class Product
      * @ORM\OneToMany(targetEntity=ProductConfiguration::class, mappedBy="product", orphanRemoval=true)
      */
     private $configurations;
+
+    /**
+     * @ORM\OneToOne(targetEntity=MediaObject::class, cascade={"persist", "remove"})
+     */
+    private ?MediaObject $productImg;
 
     public function __construct()
     {
@@ -96,6 +110,18 @@ class Product
                 $configuration->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProductImg(): ?MediaObject
+    {
+        return $this->productImg;
+    }
+
+    public function setProductImg(?MediaObject $productImg): self
+    {
+        $this->productImg = $productImg;
 
         return $this;
     }

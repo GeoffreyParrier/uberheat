@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/product", name="new-product", methods={"POST"})
+     * @Route("/products", name="new-product", methods={"POST"})
      * @param Request $request
      * @param EntityManager $em
      * @return Response

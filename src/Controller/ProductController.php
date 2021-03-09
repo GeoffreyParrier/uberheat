@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Repository\CircProductConfigurationRepository;
 use App\Repository\RectProductConfigurationRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -18,24 +19,16 @@ class ProductController extends AbstractController
     /**
      * @Route("/products", name="new-product", methods={"POST"})
      * @param Request $request
-     * @param EntityManager $em
+     * @param ManagerRegistry $managerRegistry
      * @return Response
      */
-    public function create(Request $request, EntityManager $em): Response
+    public function create(Request $request, ManagerRegistry $managerRegistry): Response
     {
         try {
-            $name = $request->get('name');
-            if (!$name) {
-                throw new BadRequestException('Product name is required');
-            }
 
-            $basePrice = $request->get('basePrice');
-            if (!$basePrice) {
-                throw new BadRequestException('Product base price is required');
-            }
 
-            $rect_product_configuration_ids = $request->get('rect_product_configuration_ids');
-            $circ_product_configuration_ids = $request->get('circ_product_configuration_ids');
+            $rect_product_configuration_ids = explode(', ', $request->get('rect_product_configuration_ids'));
+            $circ_product_configuration_ids = explode(', ', $request->get('circ_product_configuration_ids'));
             if (!$rect_product_configuration_ids && !$circ_product_configuration_ids) {
                 throw new BadRequestException('A product need at least one configuration');
             }
@@ -52,7 +45,7 @@ class ProductController extends AbstractController
             $RectProductConfigurations = [];
             if ($rect_product_configuration_ids) {
                 foreach ($rect_product_configuration_ids as $index => $rect_product_configuration_id) {
-                    $rpcr = new RectProductConfigurationRepository();
+                    $rpcr = new RectProductConfigurationRepository($managerRegistry);
                     $rpc = $rpcr->findOneById($rect_product_configuration_id);
 
                     if (!array_key_exists($rect_product_configuration_id, $RectProductConfigurations)) {
@@ -64,7 +57,7 @@ class ProductController extends AbstractController
             $CircProductConfigurations = [];
             if ($circ_product_configuration_ids) {
                 foreach ($circ_product_configuration_ids as $index => $circ_product_configuration_id) {
-                    $cpcr = new CircProductConfigurationRepository();
+                    $cpcr = new CircProductConfigurationRepository($managerRegistry);
                     $cpc = $cpcr->findOneById($circ_product_configuration_id);
 
                     if (!array_key_exists($circ_product_configuration_id, $CircProductConfigurations)) {
@@ -78,6 +71,7 @@ class ProductController extends AbstractController
                 $product->addConfiguration($productConfiguration);
             }
 
+            $em = $managerRegistry->getManager();
             $em->persist($product);
             $em->flush();
         } catch (Exception $e) {
@@ -88,35 +82,35 @@ class ProductController extends AbstractController
         return $this->json(['code' => 'SUCCESS']);
     }
 
-    /**
-     * @Route("/product", name="new-product", methods={"POST"})
-     */
-    public function read(Request $request): Response
-    {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
-    }
-
-    // TODO: read all route
-
-    /**
-     * @Route("/product", name="new-product", methods={"POST"})
-     */
-    public function update(Request $request): Response
-    {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
-    }
-
-    /**
-     * @Route("/product", name="new-product", methods={"POST"})
-     */
-    public function delete(Request $request): Response
-    {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
-    }
+//    /**
+//     * @Route("/product", name="new-product", methods={"POST"})
+//     */
+//    public function read(Request $request): Response
+//    {
+//        return $this->render('product/index.html.twig', [
+//            'controller_name' => 'ProductController',
+//        ]);
+//    }
+//
+//    // TODO: read all route
+//
+//    /**
+//     * @Route("/product", name="new-product", methods={"POST"})
+//     */
+//    public function update(Request $request): Response
+//    {
+//        return $this->render('product/index.html.twig', [
+//            'controller_name' => 'ProductController',
+//        ]);
+//    }
+//
+//    /**
+//     * @Route("/product", name="new-product", methods={"POST"})
+//     */
+//    public function delete(Request $request): Response
+//    {
+//        return $this->render('product/index.html.twig', [
+//            'controller_name' => 'ProductController',
+//        ]);
+//    }
 }

@@ -19,3 +19,4 @@
 ###< symfony/phpunit-bridge ###
 coverage/
 .idea
+public/media

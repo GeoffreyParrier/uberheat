@@ -12,12 +12,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductConfigurationController extends AbstractController
 {
-	/**
-	 * @Route("/products/configurations/import", name="product_configuration_import", methods={"POST"})
-	 * @param Request $request
-	 * @param ProductConfigurationImportService $importService
-	 * @return Response
-	 */
+  /**
+   * @Route("/products/configurations/import", name="product_configuration_import", methods={"POST"})
+   */
   public function index(Request $request, ProductConfigurationImportService $importService): Response
   {
     $file = $request->files->get('file');

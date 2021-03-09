@@ -5,9 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductConfigurationRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource()
@@ -21,135 +18,120 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 abstract class ProductConfiguration
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
-	protected $id;
+  /**
+   * @ORM\Id
+   * @ORM\GeneratedValue
+   * @ORM\Column(type="integer")
+   */
+  protected $id;
 
-	/**
-	 * @ORM\Column(type="integer")
-	 */
-	protected $depth;
+  /**
+   * @ORM\Column(type="integer")
+   */
+  protected $depth;
 
-	/**
-	 * @ORM\Column(type="float")
-	 */
-	protected $dB1;
+  /**
+   * @ORM\Column(type="float")
+   */
+  protected $dB1;
 
-	/**
-	 * @ORM\Column(type="float")
-	 */
-	protected $dB2;
+  /**
+   * @ORM\Column(type="float")
+   */
+  protected $dB2;
 
-	/**
-	 * @ORM\Column(type="float")
-	 */
-	protected $dB5;
+  /**
+   * @ORM\Column(type="float")
+   */
+  protected $dB5;
 
-	/**
-	 * @ORM\Column(type="float")
-	 */
-	protected $dB10;
+  /**
+   * @ORM\Column(type="float")
+   */
+  protected $dB10;
 
-	/**
-	 * @var File|null
-	 *
-	 * @Assert\NotNull(groups={"media_object_create"})
-	 * @Vich\UploadableField(mapping="media_object", fileNameProperty="filePath")
-	 */
-	public $file;
+  /**
+   * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="configurations")
+   * @ORM\JoinColumn(nullable=false)
+   */
+  protected $product;
 
-	/**
-	 * @var string|null
-	 *
-	 * @ORM\Column(nullable=true)
-	 */
-	public $filePath;
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="configurations")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	protected $product;
+  public function getDepth(): ?int
+  {
+    return $this->depth;
+  }
 
-	public function getId(): ?int
-	{
-		return $this->id;
-	}
+  public function setDepth(int $depth): self
+  {
+    $this->depth = $depth;
 
-	public function getDepth(): ?int
-	{
-		return $this->depth;
-	}
+    return $this;
+  }
 
-	public function setDepth(int $depth): self
-	{
-		$this->depth = $depth;
+  public function getDB1(): ?float
+  {
+    return $this->dB1;
+  }
 
-		return $this;
-	}
+  public function setDB1(float $dB1): self
+  {
+    $this->dB1 = $dB1;
 
-	public function getDB1(): ?float
-	{
-		return $this->dB1;
-	}
+    return $this;
+  }
 
-	public function setDB1(float $dB1): self
-	{
-		$this->dB1 = $dB1;
+  public function getDB2(): ?float
+  {
+    return $this->dB2;
+  }
 
-		return $this;
-	}
+  public function setDB2(float $dB2): self
+  {
+    $this->dB2 = $dB2;
 
-	public function getDB2(): ?float
-	{
-		return $this->dB2;
-	}
+    return $this;
+  }
 
-	public function setDB2(float $dB2): self
-	{
-		$this->dB2 = $dB2;
+  public function getDB5(): ?float
+  {
+    return $this->dB5;
+  }
 
-		return $this;
-	}
+  public function setDB5(float $dB5): self
+  {
+    $this->dB5 = $dB5;
 
-	public function getDB5(): ?float
-	{
-		return $this->dB5;
-	}
+    return $this;
+  }
 
-	public function setDB5(float $dB5): self
-	{
-		$this->dB5 = $dB5;
+  public function getDB10(): ?float
+  {
+    return $this->dB10;
+  }
 
-		return $this;
-	}
+  public function setDB10(float $dB10): self
+  {
+    $this->dB10 = $dB10;
 
-	public function getDB10(): ?float
-	{
-		return $this->dB10;
-	}
+    return $this;
+  }
 
-	public function setDB10(float $dB10): self
-	{
-		$this->dB10 = $dB10;
+  public function getProduct(): ?Product
+  {
+    return $this->product;
+  }
 
-		return $this;
-	}
+  public function setProduct(?Product $product): self
+  {
+    $this->product = $product;
 
-	public function getProduct(): ?Product
-	{
-		return $this->product;
-	}
+    return $this;
+  }
 
-	public function setProduct(?Product $product): self
-	{
-		$this->product = $product;
-
-		return $this;
-	}
-
-	public abstract function getSurface();
+  public abstract function getSurface();
 }

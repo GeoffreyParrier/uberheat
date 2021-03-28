@@ -101,7 +101,8 @@ class SearchController extends AbstractController
                 'error' => [
                     'code' => 'HTTP_BAD_REQUEST',
                     'message' => $e->getMessage()
-                ]
+                ],
+                'data' => null
             ], Response::HTTP_BAD_REQUEST);
         }
     }

@@ -30,61 +30,64 @@ class SearchIntent
 
     /**
      * @param object $query JSON search query decoded in array format
-     * @throws Exception
+     * @throws Exception Stringify error in query
      */
     public function setSearch(object $query): void
     {
-//        if ($this->isValidQueryFormat($query)) {
-//            throw new Exception('Bad format for search format');
-//        }
+        try {
+            $this->isValidQueryFormat($query);
+        } catch (Exception $e) {
+            throw new Exception('Bad format for search format, ' . strtolower($e->getMessage()));
+        }
 
         $this->searchType = $query->type;
         $this->conditions = $query->conditions;
     }
 
     /**
-     * @param array $query JSON search query decoded in array format
-     * @return bool
+     * @param object $query JSON search query decoded in array format
+     * @return bool true if query format is valid
+     * @throws Exception the error in the query
      */
-    private function isValidQueryFormat(array $query): bool
+    private function isValidQueryFormat(object $query): bool
     {
-        $validSearchProperties = ['type', 'conditions'];
+        $requiredQueryProperties = ['type', 'conditions'];
 
-        // Check if query has only accepted and required search properties
-        foreach ($query as $queryProperty) {
-            if (!in_array($queryProperty, $validSearchProperties, true)) {
-                return false;
-            }
-
-            $isCurrentPropertyValid = false;
-            foreach ($validSearchProperties as $validSearchProperty) {
-                if ($queryProperty === $validSearchProperty) {
-                    $isCurrentPropertyValid = true;
-                }
-            }
-
-            if (!$isCurrentPropertyValid) {
-                return false;
+        // Check if required search properties exist in $query
+        foreach ($requiredQueryProperties as $requiredQueryProperty) {
+            if (!property_exists($query, $requiredQueryProperty)) {
+                throw new Exception(sprintf('Missing property "%s"', $requiredQueryProperty));
             }
         }
 
-        foreach ($query['conditions'] as $condition) {
-            foreach ($condition as $index => $conditionSettings) {
-                $validConditionIndexes = ['property', 'condition', 'value'];
+        // Check if $query has only accepted properties
+        $queryPropertiesArray = get_object_vars($query);
+        foreach ($queryPropertiesArray as $queryProperty => $queryPropertyValue) {
+            if (!in_array($queryProperty, $requiredQueryProperties, true)) {
+                throw new Exception(sprintf('Unknown property "%s", only [%s] are accepted', $queryProperty, implode(', ', $requiredQueryProperties)));
+            }
+        }
 
-                if (!in_array($index, $validConditionIndexes, true)) {
-                    return false;
+
+        // Check all conditions properties
+        $conditions = $query->conditions;
+        $requiredConditionProperties = ['property', 'rule', 'value'];
+
+        foreach ($conditions as $condition) {
+
+            // Check if required condition properties exist in all conditions
+            foreach ($requiredConditionProperties as $validConditionProperty) {
+                if (!property_exists($condition, $validConditionProperty)) {
+                    throw new Exception(sprintf('Missing property "%s" in conditions', $validConditionProperty));
                 }
+            }
 
-                $isCurrentSettingValid = false;
-                foreach ($validConditionIndexes as $validConditionIndex) {
-                    if ($conditionSettings === $validConditionIndex) {
-                        $isCurrentSettingValid = true;
-                    }
-                }
+            // Check if all conditions has only accepted properties
+            $conditionPropertiesArray = get_object_vars($condition);
 
-                if (!$isCurrentSettingValid) {
-                    return false;
+            foreach ($conditionPropertiesArray as $conditionPropertyName => $conditionValue) {
+                if (!in_array($conditionPropertyName, $requiredConditionProperties, true)) {
+                    throw new Exception(sprintf('Unknown property "%s" in conditions, only [%s] are accepted', $conditionPropertyName, implode(', ', $requiredConditionProperties)));
                 }
             }
         }

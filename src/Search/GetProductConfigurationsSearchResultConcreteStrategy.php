@@ -4,6 +4,7 @@
 namespace App\Search;
 
 
+use App\Entity\SearchIntent;
 use App\Repository\ProductConfigurationRepository;
 use Doctrine\DBAL\Exception;
 
@@ -30,7 +31,7 @@ class GetProductConfigurationsSearchResultConcreteStrategy implements SearchStra
      * @return array
      * @throws Exception
      */
-    public function execute($searchIntent): array
+    public function execute(SearchIntent $searchIntent): array
     {
         return $this->productConfigurationRepository->getAllProductWithItConfigurations($searchIntent);
     }

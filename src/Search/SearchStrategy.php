@@ -4,6 +4,8 @@
 namespace App\Search;
 
 
+use App\Entity\SearchIntent;
+
 interface SearchStrategy
 {
     /**
@@ -15,6 +17,7 @@ interface SearchStrategy
      * Execute SearchConcreteStrategy business logic
      *
      * @param $searchIntent
+     * @return array
      */
-    public function execute($searchIntent);
+    public function execute(SearchIntent $searchIntent): array;
 }

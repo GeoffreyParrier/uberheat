@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ProductConfiguration;
-use App\Search\SearchIntent;
+use App\Entity\SearchIntent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;

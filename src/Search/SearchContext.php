@@ -4,21 +4,14 @@
 namespace App\Search;
 
 
+use App\Entity\SearchIntent;
+
 class SearchContext
 {
     /**
      * @var SearchStrategy
      */
     private SearchStrategy $strategy;
-
-    /**
-     * SearchContext constructor.
-     * @param SearchStrategy|null $strategy
-     */
-    public function __construct(SearchStrategy $strategy = null)
-    {
-        $this->$strategy = $strategy;
-    }
 
     /**
      * @return SearchStrategy
@@ -38,8 +31,9 @@ class SearchContext
 
     /**
      * @param SearchIntent $searchIntent
+     * @return array
      */
-    public function execute(SearchIntent $searchIntent)
+    public function execute(SearchIntent $searchIntent): array
     {
         return $this->strategy->execute($searchIntent);
     }

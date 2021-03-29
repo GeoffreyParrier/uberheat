@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\SearchIntent;
 use App\Repository\ProductConfigurationRepository;
 use App\Search\GetProductConfigurationsSearchResultConcreteStrategy;
-use App\Search\SaveProductConfigurationSearchResultConcreteStrategy;
 use App\Search\SearchContext;
-use App\Search\SearchIntent;
 use App\Search\SearchStrategy;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,31 +27,30 @@ class SearchController extends AbstractController
     {
         $query = $request->getContent();
 
-        return $this->searchActionsLogic($productConfigurationRepository, $query, $searchContext);
+        return $this->searchActionsLogic($query, $searchContext, $productConfigurationRepository);
     }
 
     /**
      * @Route("/search/save", name="search-save", methods={"POST"})
      * @param Request $request
      * @param SearchContext $searchContext
-     * @param ProductConfigurationRepository $productConfigurationRepository
      * @return JsonResponse
      */
-    public function saveSearchAction(Request $request, SearchContext $searchContext, ProductConfigurationRepository $productConfigurationRepository): JsonResponse
+    public function saveSearchAction(Request $request, SearchContext $searchContext): JsonResponse
     {
         $query = $request->getContent();
-        return $this->searchActionsLogic($productConfigurationRepository, $query, $searchContext);
+        return $this->searchActionsLogic($query, $searchContext);
     }
 
     /**
      * Get correct ConcreteSearchStrategy instance
      *
-     * @param ProductConfigurationRepository $productConfigurationRepository
      * @param String $searchType Search Type as string
+     * @param ProductConfigurationRepository|null $productConfigurationRepository
      * @return SearchStrategy The instance
      * @throws Exception if search type doesn't match with a strategy
      */
-    private function getSearchConcreteStrategyInstance(ProductConfigurationRepository $productConfigurationRepository, string $searchType): SearchStrategy
+    private function getSearchConcreteStrategyInstance(string $searchType, ProductConfigurationRepository $productConfigurationRepository = null): SearchStrategy
     {
         $concreteStrategy = null;
 
@@ -60,10 +58,6 @@ class SearchController extends AbstractController
         switch ($searchType) {
             case GetProductConfigurationsSearchResultConcreteStrategy::getType():
                 $concreteStrategy = new GetProductConfigurationsSearchResultConcreteStrategy($productConfigurationRepository);
-                break;
-
-            case SaveProductConfigurationSearchResultConcreteStrategy::getType():
-                $concreteStrategy = new SaveProductConfigurationSearchResultConcreteStrategy();
                 break;
 
             default:
@@ -76,18 +70,18 @@ class SearchController extends AbstractController
     /**
      * Search Actions logic
      *
-     * @param ProductConfigurationRepository $productConfigurationRepository
      * @param String $query Extracted query string
      * @param SearchContext $searchContext SearchContext DependencyInjection
+     * @param ProductConfigurationRepository|null $productConfigurationRepository
      * @return JsonResponse The action return
      */
-    private function searchActionsLogic(ProductConfigurationRepository $productConfigurationRepository, string $query, SearchContext $searchContext): JsonResponse
+    private function searchActionsLogic(string $query, SearchContext $searchContext, ProductConfigurationRepository $productConfigurationRepository = null): JsonResponse
     {
         try {
             $searchIntent = new SearchIntent();
             $searchIntent->setSearch(json_decode($query));
 
-            $searchConcreteStrategy = $this->getSearchConcreteStrategyInstance($productConfigurationRepository, $searchIntent->getSearchType());
+            $searchConcreteStrategy = $this->getSearchConcreteStrategyInstance($searchIntent->getSearchType(), $productConfigurationRepository);
 
             $searchContext->setStrategy($searchConcreteStrategy);
 

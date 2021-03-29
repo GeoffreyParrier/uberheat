@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\ProductConfiguration;
+use App\Search\SearchIntent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,31 @@ class ProductConfigurationRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductConfiguration::class);
     }
 
-    // /**
-    //  * @return ProductConfiguration[] Returns an array of ProductConfiguration objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Request product_conf_view
+     *
+     * @param SearchIntent $searchIntent
+     * @return array
+     * @throws Exception
+     */
+    public function getAllProductWithItConfigurations(SearchIntent $searchIntent): array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $conditions = $searchIntent->getConditions();
 
-    /*
-    public function findOneBySomeField($value): ?ProductConfiguration
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = /** @lang SQL */
+            "SELECT * FROM product_conf_view";
+
+
+        if (count($conditions) > 0) {
+            foreach ($conditions as $index => $condition) {
+                if ($index === 0) {
+                    $query .= ' WHERE ' . $condition->property . $condition->rule . $condition->value;
+                } else {
+                    $query .= ' AND WHERE ' . $condition->property . $condition->rule . $condition->value;
+                }
+            }
+        }
+
+        return $this->getEntityManager()->getConnection()->executeQuery($query)->fetchAll();
     }
-    */
 }

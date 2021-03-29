@@ -1,15 +1,35 @@
 <?php
 
 
-namespace App\Search;
+namespace App\Entity;
 
 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Exception;
 
+/**
+ * @ORM\Entity
+*/
 class SearchIntent
 {
+    /**
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $searchType;
 
+    /**
+     * @ORM\Column(type="array")
+     */
     private array $conditions;
 
     /**
@@ -93,5 +113,13 @@ class SearchIntent
         }
 
         return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

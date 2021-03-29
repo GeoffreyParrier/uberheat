@@ -17,7 +17,7 @@ class SaveProductConfigurationSearchResultConcreteStrategy implements SearchStra
     /**
      * {@inheritdoc}
      */
-    public function execute($searchIntent): mixed
+    public function execute($searchIntent)
     {
         return 'SavedProductConfigurationsSearchResult';
     }

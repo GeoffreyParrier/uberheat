@@ -39,9 +39,9 @@ class ProductConfigurationRepository extends ServiceEntityRepository
         if (count($conditions) > 0) {
             foreach ($conditions as $index => $condition) {
                 if ($index === 0) {
-                    $query .= ' WHERE ' . $condition->property . $condition->rule . $condition->value;
+                    $query .= ' WHERE ' . $condition->property . ' ' . $condition->rule . ' ' . $condition->value;
                 } else {
-                    $query .= ' AND WHERE ' . $condition->property . $condition->rule . $condition->value;
+                    $query .= ' AND ' . $condition->property . ' ' . $condition->rule . ' ' . $condition->value;
                 }
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ProductConfigurationRepository;
 use App\Search\GetProductConfigurationsSearchResultConcreteStrategy;
 use App\Search\SaveProductConfigurationSearchResultConcreteStrategy;
 use App\Search\SearchContext;
@@ -20,44 +21,45 @@ class SearchController extends AbstractController
      * @Route("/search", name="search", methods={"POST"})
      * @param Request $request
      * @param SearchContext $searchContext
+     * @param ProductConfigurationRepository $productConfigurationRepository
      * @return JsonResponse
      */
-    public function searchAction(Request $request, SearchContext $searchContext): JsonResponse
+    public function searchAction(Request $request, SearchContext $searchContext, ProductConfigurationRepository $productConfigurationRepository): JsonResponse
     {
         $query = $request->getContent();
 
-//        var_dump(json_decode($query));
-
-        return $this->searchActionsLogic($query, $searchContext);
+        return $this->searchActionsLogic($productConfigurationRepository, $query, $searchContext);
     }
 
     /**
      * @Route("/search/save", name="search-save", methods={"POST"})
      * @param Request $request
      * @param SearchContext $searchContext
+     * @param ProductConfigurationRepository $productConfigurationRepository
      * @return JsonResponse
      */
-    public function saveSearchAction(Request $request, SearchContext $searchContext): JsonResponse
+    public function saveSearchAction(Request $request, SearchContext $searchContext, ProductConfigurationRepository $productConfigurationRepository): JsonResponse
     {
         $query = $request->getContent();
-        return $this->searchActionsLogic($query, $searchContext);
+        return $this->searchActionsLogic($productConfigurationRepository, $query, $searchContext);
     }
 
     /**
      * Get correct ConcreteSearchStrategy instance
      *
+     * @param ProductConfigurationRepository $productConfigurationRepository
      * @param String $searchType Search Type as string
      * @return SearchStrategy The instance
      * @throws Exception if search type doesn't match with a strategy
      */
-    private function getSearchConcreteStrategyInstance(string $searchType): SearchStrategy
+    private function getSearchConcreteStrategyInstance(ProductConfigurationRepository $productConfigurationRepository, string $searchType): SearchStrategy
     {
         $concreteStrategy = null;
 
         /** @noinspection PhpSwitchCanBeReplacedWithMatchExpressionInspection */
         switch ($searchType) {
             case GetProductConfigurationsSearchResultConcreteStrategy::getType():
-                $concreteStrategy = new GetProductConfigurationsSearchResultConcreteStrategy();
+                $concreteStrategy = new GetProductConfigurationsSearchResultConcreteStrategy($productConfigurationRepository);
                 break;
 
             case SaveProductConfigurationSearchResultConcreteStrategy::getType():
@@ -74,24 +76,23 @@ class SearchController extends AbstractController
     /**
      * Search Actions logic
      *
+     * @param ProductConfigurationRepository $productConfigurationRepository
      * @param String $query Extracted query string
      * @param SearchContext $searchContext SearchContext DependencyInjection
      * @return JsonResponse The action return
      */
-    private function searchActionsLogic(string $query, SearchContext $searchContext): JsonResponse
+    private function searchActionsLogic(ProductConfigurationRepository $productConfigurationRepository, string $query, SearchContext $searchContext): JsonResponse
     {
         try {
             $searchIntent = new SearchIntent();
             $searchIntent->setSearch(json_decode($query));
 
-            $searchConcreteStrategy = $this->getSearchConcreteStrategyInstance($searchIntent->getSearchType());
+            $searchConcreteStrategy = $this->getSearchConcreteStrategyInstance($productConfigurationRepository, $searchIntent->getSearchType());
 
             $searchContext->setStrategy($searchConcreteStrategy);
 
             $searchResult = $searchContext->execute($searchIntent);
-
-            $searchResult = json_encode($searchResult);
-
+    
             return $this->json([
                 'error' => null,
                 'data' => $searchResult

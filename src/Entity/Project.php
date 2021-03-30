@@ -35,7 +35,7 @@ class Project
     private string $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=SearchIntent::class, mappedBy="project", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=SearchIntent::class, mappedBy="project", cascade={"persist", "remove"})
      */
     private Collection $searchIntents;
 

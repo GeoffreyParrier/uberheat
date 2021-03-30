@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\RectProductConfiguration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -36,6 +37,11 @@ class RectProductConfigurationRepository extends ServiceEntityRepository
     }
     */
 
+    /**
+     * @param $searched_id
+     * @return RectProductConfiguration|null
+     * @throws NonUniqueResultException
+     */
     public function findOneById($searched_id): ?RectProductConfiguration
     {
         return $this->createQueryBuilder('rpc')

@@ -6,7 +6,11 @@ class BuilderPool
 {
   private array $pool = [];
 
-  public function get(string $class): AbstractBuilder
+    /**
+     * @param string $class
+     * @return AbstractBuilder
+     */
+    public function get(string $class): AbstractBuilder
   {
     //TODO: Check $class is_subclass_of AbstractBuilder::class
     if (!array_key_exists($class, $this->pool)) {

@@ -12,7 +12,11 @@ class Shape
     "circulaire" => self::CIRCULAR
   ];
 
-  public static function getShape(string $name): ?int
+    /**
+     * @param string $name
+     * @return int|null
+     */
+    public static function getShape(string $name): ?int
   {
     $search = strtolower($name);
 

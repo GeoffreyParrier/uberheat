@@ -20,7 +20,7 @@ class SearchIntent
      * @Column(type="integer")
      * @GeneratedValue
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string")
@@ -121,18 +121,25 @@ class SearchIntent
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return Project
+     */
     public function getProject(): Project
     {
         return $this->project;
     }
 
+    /**
+     * @param Project $project
+     * @return $this
+     */
     public function setProject(Project $project): self
     {
         $this->project = $project;

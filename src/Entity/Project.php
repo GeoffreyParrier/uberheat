@@ -40,21 +40,34 @@ class Project
     private Collection $searchIntents;
 
 
+    /**
+     * Project constructor.
+     */
     public function __construct()
     {
         $this->searchIntents = new ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -70,6 +83,10 @@ class Project
         return $this->searchIntents;
     }
 
+    /**
+     * @param SearchIntent $searchIntent
+     * @return $this
+     */
     public function addSearchIntent(SearchIntent $searchIntent): self
     {
         if (!$this->searchIntents->contains($searchIntent)) {

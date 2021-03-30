@@ -18,14 +18,14 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class ProductConfigurationImportService
 {
-  private $productRepository;
-  private $em;
+  private ProductRepository $productRepository;
+  private EntityManagerInterface $em;
   private $file = null;
-  private $nbColumns = 11;
-  private $separator = ';';
-  private $products = []; // Product objects pool
-  private $director;
-  private $builderPool;
+  private int $nbColumns = 11;
+  private string $separator = ';';
+  private array $products = []; // Product objects pool
+  private BuilderDirector $director;
+  private BuilderPool $builderPool;
 
   private const AUTHORIZED_MIME_TYPES = [
     'text/csv',
@@ -35,7 +35,14 @@ class ProductConfigurationImportService
     'application/csv'
   ];
 
-  public function __construct(
+    /**
+     * ProductConfigurationImportService constructor.
+     * @param ProductRepository $productRepository
+     * @param EntityManagerInterface $em
+     * @param BuilderDirector $director
+     * @param BuilderPool $builderPool
+     */
+    public function __construct(
     ProductRepository $productRepository,
     EntityManagerInterface $em,
     BuilderDirector $director,
@@ -47,7 +54,11 @@ class ProductConfigurationImportService
     $this->builderPool = $builderPool;
   }
 
-  public function import(): int
+    /**
+     * @return int
+     * @throws FileNotSetException
+     */
+    public function import(): int
   {
     $imported = 0;
 
@@ -83,7 +94,10 @@ class ProductConfigurationImportService
     return $imported;
   }
 
-  public function getFile(): ?SplFileObject
+    /**
+     * @return SplFileObject|null
+     */
+    public function getFile(): ?SplFileObject
   {
     return $this->file;
   }
@@ -92,10 +106,10 @@ class ProductConfigurationImportService
    * Sets the file pointer to the internal file attribute
    *
    * @param File|null $file
-   * @return void
+   * @return ProductConfigurationImportService
    * @throws InvalidMimeTypeException
    */
-  public function setFile(?File $file)
+  public function setFile(?File $file): self
   {
     if (!$this->isValid($file)) {
       throw new InvalidMimeTypeException();
@@ -108,7 +122,11 @@ class ProductConfigurationImportService
     return $this;
   }
 
-  private function isValid(File $file): bool
+    /**
+     * @param File $file
+     * @return bool
+     */
+    private function isValid(File $file): bool
   {
     $mimeType = $file->getMimeType();
 
@@ -139,7 +157,11 @@ class ProductConfigurationImportService
     return $product;
   }
 
-  private function selectBuilder(int $shape): AbstractBuilder
+    /**
+     * @param int $shape
+     * @return AbstractBuilder
+     */
+    private function selectBuilder(int $shape): AbstractBuilder
   {
     switch ($shape) {
       case Shape::CIRCULAR:

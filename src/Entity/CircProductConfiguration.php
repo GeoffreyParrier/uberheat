@@ -15,21 +15,31 @@ class CircProductConfiguration extends ProductConfiguration
   /**
    * @ORM\Column(type="integer")
    */
-  private $diameter;
+  private int $diameter;
 
-  public function getSurface()
+    /**
+     * @return float|int
+     */
+    public function getSurface(): float|int
   {
     $radius = $this->diameter / 2;
 
     return M_PI * ($radius ** 2);
   }
 
-  public function getDiameter(): ?int
+    /**
+     * @return int|null
+     */
+    public function getDiameter(): ?int
   {
     return $this->diameter;
   }
 
-  public function setDiameter(int $diameter): self
+    /**
+     * @param int $diameter
+     * @return $this
+     */
+    public function setDiameter(int $diameter): self
   {
     $this->diameter = $diameter;
 

@@ -28,43 +28,56 @@ class Product
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $basePrice;
+    private float $basePrice;
 
     /**
      * @ORM\OneToMany(targetEntity=ProductConfiguration::class, mappedBy="product", orphanRemoval=true)
      */
-    private $configurations;
+    private Collection $configurations;
 
     /**
      * @ORM\OneToOne(targetEntity=MediaObject::class, cascade={"persist", "remove"})
      */
-    private ?MediaObject $productImg;
+    private MediaObject $productImg;
 
+    /**
+     * Product constructor.
+     */
     public function __construct()
     {
         $this->configurations = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -72,12 +85,19 @@ class Product
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getBasePrice(): ?float
     {
         return $this->basePrice;
     }
 
-    public function setBasePrice(?float $basePrice): self
+    /**
+     * @param float $basePrice
+     * @return $this
+     */
+    public function setBasePrice(float $basePrice): self
     {
         $this->basePrice = $basePrice;
 
@@ -85,13 +105,17 @@ class Product
     }
 
     /**
-     * @return Collection|ProductConfiguration[]
+     * @return Collection
      */
     public function getConfigurations(): Collection
     {
         return $this->configurations;
     }
 
+    /**
+     * @param ProductConfiguration $configuration
+     * @return $this
+     */
     public function addConfiguration(ProductConfiguration $configuration): self
     {
         if (!$this->configurations->contains($configuration)) {
@@ -102,6 +126,10 @@ class Product
         return $this;
     }
 
+    /**
+     * @param ProductConfiguration $configuration
+     * @return $this
+     */
     public function removeConfiguration(ProductConfiguration $configuration): self
     {
         if ($this->configurations->removeElement($configuration)) {
@@ -114,12 +142,19 @@ class Product
         return $this;
     }
 
-    public function getProductImg(): ?MediaObject
+    /**
+     * @return MediaObject
+     */
+    public function getProductImg(): MediaObject
     {
         return $this->productImg;
     }
 
-    public function setProductImg(?MediaObject $productImg): self
+    /**
+     * @param MediaObject $productImg
+     * @return $this
+     */
+    public function setProductImg(MediaObject $productImg): self
     {
         $this->productImg = $productImg;
 

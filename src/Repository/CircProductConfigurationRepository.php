@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CircProductConfiguration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -36,6 +37,11 @@ class CircProductConfigurationRepository extends ServiceEntityRepository
     }
     */
 
+    /**
+     * @param $searched_id
+     * @return CircProductConfiguration|null
+     * @throws NonUniqueResultException
+     */
     public function findOneById($searched_id): ?CircProductConfiguration
     {
         return $this->createQueryBuilder('cpc')

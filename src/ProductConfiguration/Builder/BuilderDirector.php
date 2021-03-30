@@ -8,12 +8,19 @@ class BuilderDirector
 {
   private ?AbstractBuilder $builder = null;
 
-  public function setBuilder(AbstractBuilder $builder): void
+    /**
+     * @param AbstractBuilder $builder
+     */
+    public function setBuilder(AbstractBuilder $builder): void
   {
     $this->builder = $builder;
   }
 
-  public function make(array $productConfigurationData): ?ProductConfiguration
+    /**
+     * @param array $productConfigurationData
+     * @return ProductConfiguration|null
+     */
+    public function make(array $productConfigurationData): ?ProductConfiguration
   {
     $this->builder->reset();
     $this->builder->stepGenericAttributes($productConfigurationData);

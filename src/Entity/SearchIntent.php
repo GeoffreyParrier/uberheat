@@ -12,7 +12,7 @@ use Exception;
 
 /**
  * @ORM\Entity
-*/
+ */
 class SearchIntent
 {
     /**
@@ -31,6 +31,11 @@ class SearchIntent
      * @ORM\Column(type="array")
      */
     private array $conditions;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="searchIntents", cascade={"persist"})
+     */
+    private Project $project;
 
     /**
      * @return string
@@ -121,5 +126,17 @@ class SearchIntent
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getProject(): Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
     }
 }

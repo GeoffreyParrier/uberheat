@@ -17,11 +17,12 @@ class CircProductConfiguration extends ProductConfiguration
    */
   private int $diameter;
 
+
     /**
-     * @return float|int
+     * @return float
      */
-    public function getSurface(): float|int
-  {
+    public function getSurface(): float
+    {
     $radius = $this->diameter / 2;
 
     return M_PI * ($radius ** 2);
